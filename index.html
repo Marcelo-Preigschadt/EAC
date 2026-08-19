@@ -8,17 +8,17 @@
 <title>Calculadora EAC</title>
 <style>
 :root{
-  --ink:#17202a;
-  --muted:#69737c;
-  --paper:#f3f0e8;
+  --ink:#18222d;
+  --muted:#69747f;
+  --paper:#f4f1e9;
   --surface:#fffdf8;
   --line:#d8d5cd;
   --green:#173b36;
-  --green-2:#24574f;
+  --green2:#24574f;
+  --green-soft:#e8f1ee;
   --lime:#d7ef63;
-  --lime-ink:#243006;
   --danger:#b64242;
-  --shadow:0 18px 45px rgba(32,40,45,.10);
+  --shadow:0 18px 44px rgba(31,42,40,.10);
 }
 *{box-sizing:border-box}
 html{min-height:100%}
@@ -33,7 +33,7 @@ button,input{font:inherit}
 button{cursor:pointer}
 .shell{width:min(1180px,calc(100% - 32px));margin:0 auto}
 .appbar{
-  height:72px;
+  height:66px;
   background:var(--green);
   color:#fff;
   border-bottom:4px solid var(--lime);
@@ -43,70 +43,82 @@ button{cursor:pointer}
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:24px;
+  gap:20px;
 }
-.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
 .mark{
   width:40px;height:40px;display:grid;place-items:center;
-  background:var(--lime);color:var(--lime-ink);
-  font-size:12px;font-weight:950;letter-spacing:.06em;
-  border-radius:8px;
+  border-radius:8px;background:var(--lime);color:#243006;
+  font-size:12px;font-weight:950;letter-spacing:.05em;
 }
-.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text{display:flex;flex-direction:column;line-height:1.08}
 .brand-text strong{font-size:15px;letter-spacing:-.01em}
-.brand-text span{margin-top:5px;font-size:11px;color:#b8cbc6}
-.app-context{font-size:12px;color:#dce7e4;text-align:right}
-main{padding:34px 0 48px}
+.brand-text span{margin-top:5px;font-size:11px;color:#bed0cb}
+.app-context{font-size:12px;color:#e3ece9}
+
+main{padding:18px 0 34px}
 .intro{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:28px;
-  margin-bottom:22px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(360px,.78fr);
+  gap:34px;
+  align-items:end;
+  margin-bottom:16px;
 }
-.intro-copy{max-width:660px}
 .eyebrow{
   display:block;
-  margin-bottom:8px;
-  font-size:11px;
+  margin-bottom:5px;
+  color:var(--green2);
+  font-size:10px;
   font-weight:900;
-  letter-spacing:.13em;
+  letter-spacing:.12em;
   text-transform:uppercase;
-  color:var(--green-2);
 }
 h1{
   margin:0;
-  font-size:clamp(30px,4vw,48px);
-  line-height:1.02;
-  letter-spacing:-.045em;
+  font-size:clamp(29px,3.3vw,43px);
+  line-height:1.04;
+  letter-spacing:-.04em;
 }
 .intro p{
-  margin:10px 0 0;
-  max-width:610px;
+  margin:7px 0 0;
+  max-width:650px;
   color:var(--muted);
-  font-size:14px;
-  line-height:1.55;
+  font-size:13px;
+  line-height:1.5;
 }
 .formula{
-  min-width:320px;
-  padding:0 0 4px 18px;
-  border-left:3px solid var(--green);
+  padding:12px 14px;
+  border:1px solid #cfcac0;
+  border-left:4px solid var(--green);
+  background:rgba(255,253,248,.72);
 }
-.formula span{
+.formula-label{
   display:block;
-  margin-bottom:7px;
+  margin-bottom:5px;
   color:var(--muted);
-  font-size:10px;
+  font-size:9px;
   font-weight:900;
-  letter-spacing:.11em;
+  letter-spacing:.1em;
   text-transform:uppercase;
+}
+.formula strong{
+  display:block;
+  color:var(--ink);
+  font-size:12px;
+  line-height:1.45;
 }
 .formula code{
   font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
-  font-size:12px;
+  font-size:11px;
   font-weight:800;
-  color:var(--ink);
 }
+.formula-example{
+  margin-top:5px;
+  color:#7a827e;
+  font-size:10px;
+  line-height:1.35;
+}
+
 .calculator{
   overflow:hidden;
   background:var(--surface);
@@ -114,63 +126,91 @@ h1{
   box-shadow:var(--shadow);
 }
 .calc-head{
-  min-height:58px;
+  min-height:52px;
   padding:0 22px;
   border-bottom:1px solid var(--line);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:18px;
+  gap:16px;
 }
-.calc-head strong{font-size:14px}
-.calc-head span{font-size:11px;color:var(--muted)}
+.calc-head strong{font-size:13px;letter-spacing:-.01em}
+.status{display:inline-flex;align-items:center;gap:7px;color:#7e8782;font-size:10px;font-weight:800}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#adb3b0}
+.status.ready{color:var(--green2)}
+.status.ready .status-dot{background:var(--lime)}
+
 .flow{
   display:grid;
-  grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr) 48px minmax(300px,1.12fr);
-  min-height:330px;
+  grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr) 44px minmax(320px,1.08fr);
+  min-height:310px;
 }
 .stage{
-  padding:34px 30px 28px;
+  padding:28px 28px 24px;
   display:flex;
   flex-direction:column;
   justify-content:center;
 }
 .stage + .stage{border-left:1px solid var(--line)}
-.stage-tag{
-  margin-bottom:18px;
+.stage-head{margin-bottom:18px}
+.stage-kicker{
   display:flex;
   align-items:center;
   gap:9px;
-  color:var(--green-2);
-  font-size:11px;
+  margin-bottom:8px;
+  color:var(--green2);
+  font-size:10px;
   font-weight:900;
   letter-spacing:.08em;
   text-transform:uppercase;
 }
-.stage-tag b{
-  width:27px;height:27px;display:grid;place-items:center;
-  border:1px solid #bfc9c5;
+.stage-number{
+  width:28px;height:28px;display:grid;place-items:center;
   border-radius:50%;
-  font-size:10px;
+  border:1px solid #c4d0cc;
+  background:#f8faf9;
+  color:var(--green2);
+  font-size:10px;font-weight:950;
 }
-.field-label{font-size:15px;font-weight:850;margin-bottom:9px}
+.stage-title{
+  margin:0;
+  font-size:20px;
+  line-height:1.1;
+  letter-spacing:-.025em;
+}
+.stage-copy{
+  margin:5px 0 0;
+  color:#8a928e;
+  font-size:10px;
+  line-height:1.4;
+}
+.field-label{
+  display:block;
+  margin-bottom:7px;
+  color:#4e5954;
+  font-size:11px;
+  font-weight:850;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
 .input-wrap{position:relative}
 .input-wrap input{
   width:100%;
-  height:72px;
-  border:1.5px solid #c9cec9;
+  height:68px;
+  border:1.5px solid #c8cdc9;
+  border-radius:8px;
   background:#fff;
-  padding:0 68px 0 17px;
+  padding:0 66px 0 17px;
   outline:none;
   color:var(--ink);
-  font-size:28px;
-  font-weight:800;
+  font-size:27px;
+  font-weight:850;
   font-variant-numeric:tabular-nums;
-  border-radius:8px;
   transition:border-color .15s,box-shadow .15s;
 }
+.input-wrap input::placeholder{color:#8a8f8c;opacity:1}
 .input-wrap input:focus{
-  border-color:var(--green-2);
+  border-color:var(--green2);
   box-shadow:0 0 0 4px rgba(36,87,79,.10);
 }
 .input-wrap input.invalid{
@@ -178,139 +218,150 @@ h1{
   box-shadow:0 0 0 4px rgba(182,66,66,.08);
 }
 .suffix{
-  position:absolute;
-  right:15px;top:50%;transform:translateY(-50%);
-  color:#89918d;font-size:11px;font-weight:800;
+  position:absolute;right:15px;top:50%;transform:translateY(-50%);
+  color:#87908b;font-size:11px;font-weight:850;
 }
 .help{
-  min-height:34px;
-  padding-top:8px;
+  min-height:24px;
+  padding-top:7px;
   display:flex;
   flex-direction:column;
-  gap:3px;
-  color:#8b918e;
-  font-size:10px;
+  gap:2px;
+  color:#8a928e;
+  font-size:9px;
   line-height:1.35;
 }
 .error{color:var(--danger);font-weight:800}
 .connector{
   display:grid;
   place-items:center;
-  color:#8b938f;
-  font-size:28px;
+  color:#8d9590;
   border-left:1px solid var(--line);
 }
 .connector span{
-  width:30px;height:30px;
-  display:grid;place-items:center;
-  border:1px solid #c9cec9;
-  border-radius:50%;
-  background:#f7f5ef;
-  font-size:16px;
+  width:30px;height:30px;display:grid;place-items:center;
+  border-radius:50%;border:1px solid #c9cec9;background:#f7f5ef;
+  font-size:15px;
 }
+
 .result-stage{
   background:var(--green);
   color:#fff;
-  padding:32px 32px 28px;
+  padding:28px 30px 24px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
 }
-.result-stage .stage-tag{color:#b9d3cc;margin-bottom:10px}
-.result-stage .stage-tag b{border-color:#45675f;color:var(--lime)}
-.result-label{font-size:12px;color:#b7c8c4;font-weight:750}
+.result-stage .stage-kicker{color:#b7d0ca;margin-bottom:8px}
+.result-stage .stage-number{border-color:#45675f;background:transparent;color:var(--lime)}
+.result-title{
+  margin:0 0 2px;
+  color:#dbe8e5;
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
 .result-value{
-  margin:6px 0 2px;
-  font-size:clamp(72px,8vw,104px);
-  line-height:.95;
-  letter-spacing:-.07em;
-  font-weight:900;
+  min-height:88px;
+  margin:0;
+  display:flex;
+  align-items:center;
+  font-size:clamp(62px,7vw,92px);
+  line-height:.92;
+  letter-spacing:-.065em;
+  font-weight:920;
   font-variant-numeric:tabular-nums;
 }
-.result-hint{font-size:11px;color:#9fb3ae}
+.result-hint{margin-top:4px;font-size:10px;color:#a9bdb8}
 .result-meta{
-  margin-top:24px;
-  padding-top:17px;
+  margin-top:19px;
+  padding-top:15px;
   border-top:1px solid #3e5c55;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:14px;
+  gap:13px 20px;
 }
-.meta-item span{display:block;font-size:9px;color:#92a8a2;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.meta-item span{
+  display:block;
+  margin-bottom:3px;
+  color:#91a8a2;
+  font-size:8px;
+  font-weight:800;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+}
 .meta-item strong{font-size:15px}
 .meta-item.gain strong{color:var(--lime)}
+
 .actionbar{
-  display:grid;
-  grid-template-columns:auto 1fr;
+  display:flex;
   align-items:center;
   gap:14px;
-  padding:15px 18px;
+  padding:12px 18px;
   background:#ece9e0;
   border-top:1px solid var(--line);
 }
 .secondary{
-  min-height:46px;
+  min-height:42px;
+  padding:0 17px;
+  border:1px solid #bfc1bb;
   border-radius:7px;
-  padding:0 18px;
-  font-weight:850;
-  font-size:13px;
   background:transparent;
   color:var(--ink);
-  border:1px solid #bfc1bb;
+  font-size:12px;
+  font-weight:850;
 }
 .secondary:hover{background:#fff}
-.memory{
-  min-width:0;
-  text-align:right;
+.memory{margin-left:auto;min-width:0;text-align:right}
+.memory span{
+  display:block;
+  margin-bottom:3px;
+  color:#777f7a;
+  font-size:8px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
 }
-.memory span{display:block;color:#777f7a;font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:3px}
 .memory code{
   display:block;
   color:#424944;
   font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
-  font-size:10px;
+  font-size:9px;
   white-space:normal;
   overflow-wrap:anywhere;
 }
-.status{
-  display:inline-flex;
-  align-items:center;
-  gap:7px;
-}
-.status-dot{width:7px;height:7px;border-radius:50%;background:#a6aca9}
-.status.ready .status-dot{background:var(--lime)}
-.status.ready{color:#31534b}
-@media(max-width:900px){
-  .intro{align-items:flex-start;flex-direction:column;gap:17px}
-  .formula{min-width:0;width:100%}
+
+@media(max-width:920px){
+  .intro{grid-template-columns:1fr;gap:12px;align-items:start}
+  .formula{width:100%}
   .flow{grid-template-columns:1fr;min-height:0}
-  .stage,.result-stage{padding:26px 24px}
+  .stage,.result-stage{padding:24px 22px}
   .stage + .stage{border-left:0}
-  .connector{
-    height:44px;
-    border-left:0;
-    border-top:1px solid var(--line);
-  }
+  .connector{height:42px;border-left:0;border-top:1px solid var(--line)}
   .connector span{transform:rotate(90deg)}
-  .result-stage{min-height:280px}
-  .actionbar{grid-template-columns:1fr}
-  .secondary{width:100%}
-  .memory{text-align:left;padding-top:6px}
+  .result-stage{min-height:270px}
+  .actionbar{align-items:flex-start;flex-direction:column}
+  .memory{margin-left:0;text-align:left}
 }
 @media(max-width:560px){
   .shell{width:min(100% - 20px,560px)}
-  .appbar{height:64px}
+  .appbar{height:62px}
   .app-context{display:none}
-  main{padding:24px 0 30px}
-  h1{font-size:34px}
-  .intro p{font-size:13px}
-  .calc-head{padding:0 16px}
-  .calc-head span{display:none}
-  .stage,.result-stage{padding:22px 18px}
-  .input-wrap input{height:66px;font-size:25px}
-  .result-stage{min-height:255px}
-  .result-value{font-size:78px}
-  .actionbar{padding:12px}
+  main{padding:14px 0 24px}
+  h1{font-size:31px}
+  .intro p{font-size:12px}
+  .formula strong{font-size:11px}
+  .calc-head{padding:0 14px;min-height:48px}
+  .calc-head strong{font-size:12px}
+  .calc-head .status{display:none}
+  .stage,.result-stage{padding:21px 18px}
+  .stage-title{font-size:18px}
+  .input-wrap input{height:64px;font-size:25px}
+  .result-stage{min-height:250px}
+  .result-value{font-size:72px;min-height:78px}
+  .actionbar{padding:10px 12px}
+  .secondary{width:100%}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -328,55 +379,65 @@ h1{
     <div class="app-context">Ferramenta de cálculo para professores</div>
   </div>
 </header>
+
 <main class="shell">
   <section class="intro">
-    <div class="intro-copy">
+    <div>
       <span class="eyebrow">Recuperação de aprendizagem</span>
       <h1>Nova nota após o EAC</h1>
-      <p>Informe a média atual e a nota obtida no EAC. Assim que os dois valores forem preenchidos, a nova nota aparecerá automaticamente.</p>
+      <p>Informe a média atual e a nota obtida no EAC. Assim que os dois valores forem válidos, o resultado será atualizado automaticamente.</p>
     </div>
-    <div class="formula" aria-label="Fórmula utilizada">
-      <span>Regra de cálculo</span>
-      <code>(((10 − EAC) ÷ 10) × Média) + EAC</code>
-    </div>
+    <aside class="formula" aria-label="Regra de cálculo utilizada">
+      <span class="formula-label">Fórmula completa</span>
+      <strong>Nota nova = <code>[((10 − Nota EAC) ÷ 10) × Média atual] + Nota EAC</code></strong>
+      <div class="formula-example">Exemplo: média 8,0 e EAC 4,5 → [((10 − 4,5) ÷ 10) × 8,0] + 4,5 = 8,9</div>
+    </aside>
   </section>
+
   <section class="calculator" aria-label="Calculadora de nota EAC">
     <div class="calc-head">
       <strong>Preencha as duas notas</strong>
       <span class="status" id="status"><i class="status-dot"></i><b id="statusText">Aguardando notas</b></span>
     </div>
+
     <form id="form" novalidate>
       <div class="flow">
-        <div class="stage">
-          <div class="stage-tag"><b>01</b> Nota anterior</div>
-          <label class="field-label" for="media">Média atual</label>
+        <section class="stage">
+          <div class="stage-head">
+            <div class="stage-kicker"><span class="stage-number">01</span> Nota anterior</div>
+            <h2 class="stage-title">Média atual</h2>
+            <p class="stage-copy">Valor da média antes da atividade EAC.</p>
+          </div>
+          <label class="field-label" for="media">Informe a média</label>
           <div class="input-wrap">
-            <input id="media" inputmode="decimal" autocomplete="off" placeholder="8,0" aria-describedby="mediaHelp mediaError">
+            <input id="media" inputmode="decimal" autocomplete="off" placeholder="8,0" aria-describedby="mediaError">
             <span class="suffix">/ 10</span>
           </div>
-          <div class="help">
-            <span id="mediaHelp">Valor da média antes da atividade EAC.</span>
-            <span class="error" id="mediaError"></span>
-          </div>
-        </div>
+          <div class="help"><span class="error" id="mediaError"></span></div>
+        </section>
+
         <div class="connector" aria-hidden="true"><span>→</span></div>
-        <div class="stage">
-          <div class="stage-tag"><b>02</b> Recuperação</div>
-          <label class="field-label" for="eac">Nota do EAC</label>
+
+        <section class="stage">
+          <div class="stage-head">
+            <div class="stage-kicker"><span class="stage-number">02</span> Recuperação</div>
+            <h2 class="stage-title">Nota do EAC</h2>
+            <p class="stage-copy">Nota obtida na atividade de recuperação.</p>
+          </div>
+          <label class="field-label" for="eac">Informe a nota</label>
           <div class="input-wrap">
-            <input id="eac" inputmode="decimal" autocomplete="off" placeholder="4,5" aria-describedby="eacHelp eacError">
+            <input id="eac" inputmode="decimal" autocomplete="off" placeholder="4,5" aria-describedby="eacError">
             <span class="suffix">/ 10</span>
           </div>
-          <div class="help">
-            <span id="eacHelp">Nota obtida na atividade de recuperação.</span>
-            <span class="error" id="eacError"></span>
-          </div>
-        </div>
+          <div class="help"><span class="error" id="eacError"></span></div>
+        </section>
+
         <div class="connector" aria-hidden="true"><span>→</span></div>
-        <div class="result-stage" aria-live="polite">
+
+        <section class="result-stage" aria-live="polite">
           <div>
-            <div class="stage-tag"><b>03</b> Resultado</div>
-            <div class="result-label">Nova nota</div>
+            <div class="stage-kicker"><span class="stage-number">03</span> Resultado</div>
+            <div class="result-title">Nova nota</div>
             <div class="result-value" id="notaNova">—</div>
             <div class="result-hint" id="hint">Preencha as duas notas.</div>
           </div>
@@ -386,8 +447,9 @@ h1{
             <div class="meta-item gain"><span>Acréscimo</span><strong id="ganhoOut">—</strong></div>
             <div class="meta-item"><span>Escala</span><strong>0 a 10</strong></div>
           </div>
-        </div>
+        </section>
       </div>
+
       <div class="actionbar">
         <button class="secondary" id="reset" type="button">Limpar cálculo</button>
         <div class="memory" id="memory" hidden>
@@ -398,24 +460,14 @@ h1{
     </form>
   </section>
 </main>
+
 <script>
-const $ = id => document.getElementById(id);
-const form = $('form');
-const media = $('media');
-const eac = $('eac');
-const mediaError = $('mediaError');
-const eacError = $('eacError');
-const notaNova = $('notaNova');
-const mediaOut = $('mediaOut');
-const eacOut = $('eacOut');
-const ganhoOut = $('ganhoOut');
-const hint = $('hint');
-const memory = $('memory');
-const memoryText = $('memoryText');
-const reset = $('reset');
-const status = $('status');
-const statusText = $('statusText');
-const nf = new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+const $=id=>document.getElementById(id);
+const media=$('media'),eac=$('eac'),mediaError=$('mediaError'),eacError=$('eacError');
+const notaNova=$('notaNova'),mediaOut=$('mediaOut'),eacOut=$('eacOut'),ganhoOut=$('ganhoOut');
+const hint=$('hint'),memory=$('memory'),memoryText=$('memoryText'),reset=$('reset'),status=$('status'),statusText=$('statusText');
+const nf=new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+
 function parseGrade(value){
   const normalized=value.trim().replace(',','.');
   if(!normalized)return null;
@@ -423,21 +475,16 @@ function parseGrade(value){
   return Number.isFinite(number)?number:NaN;
 }
 function formatGrade(value){
-  const rounded=Math.round((value+Number.EPSILON)*10)/10;
-  return nf.format(rounded);
+  return nf.format(Math.round((value+Number.EPSILON)*10)/10);
 }
 function calculateGrade(mediaValue,eacValue){
   return (((10-eacValue)/10)*mediaValue)+eacValue;
 }
-function clearFieldError(input,error){
-  input.classList.remove('invalid');
-  input.removeAttribute('aria-invalid');
-  error.textContent='';
-}
-function setFieldError(input,error,message){
-  input.classList.add('invalid');
-  input.setAttribute('aria-invalid','true');
+function setError(input,error,message=''){
   error.textContent=message;
+  input.classList.toggle('invalid',Boolean(message));
+  if(message)input.setAttribute('aria-invalid','true');
+  else input.removeAttribute('aria-invalid');
 }
 function clearResult(){
   notaNova.textContent='—';
@@ -457,41 +504,34 @@ function showResult(mediaValue,eacValue){
   mediaOut.textContent=formatGrade(mediaValue);
   eacOut.textContent=formatGrade(eacValue);
   ganhoOut.textContent=(gain>=0?'+':'')+formatGrade(gain);
-  hint.textContent='Resultado calculado automaticamente.';
+  hint.textContent='Resultado atualizado automaticamente.';
   memory.hidden=false;
-  memoryText.textContent='(((10 − '+formatGrade(eacValue)+') ÷ 10) × '+formatGrade(mediaValue)+') + '+formatGrade(eacValue)+' = '+formatGrade(result);
+  memoryText.textContent='Nota nova = [((10 − '+formatGrade(eacValue)+') ÷ 10) × '+formatGrade(mediaValue)+'] + '+formatGrade(eacValue)+' = '+formatGrade(result);
   status.className='status ready';
   statusText.textContent='Calculado';
 }
-function updateCalculation(){
-  clearFieldError(media,mediaError);
-  clearFieldError(eac,eacError);
-  const mediaValue=parseGrade(media.value);
-  const eacValue=parseGrade(eac.value);
-  let invalid=false;
-  if(mediaValue!==null){
-    if(Number.isNaN(mediaValue)){setFieldError(media,mediaError,'Média inválida.');invalid=true;}
-    else if(mediaValue<0||mediaValue>10){setFieldError(media,mediaError,'Use um valor entre 0 e 10.');invalid=true;}
-  }
-  if(eacValue!==null){
-    if(Number.isNaN(eacValue)){setFieldError(eac,eacError,'Nota EAC inválida.');invalid=true;}
-    else if(eacValue<0||eacValue>10){setFieldError(eac,eacError,'Use um valor entre 0 e 10.');invalid=true;}
-  }
-  if(invalid||mediaValue===null||eacValue===null){clearResult();return;}
-  showResult(mediaValue,eacValue);
+function evaluate(){
+  const m=parseGrade(media.value);
+  const e=parseGrade(eac.value);
+  setError(media,mediaError);
+  setError(eac,eacError);
+
+  if(m!==null&&(Number.isNaN(m)||m<0||m>10)) setError(media,mediaError,'Use um valor entre 0 e 10.');
+  if(e!==null&&(Number.isNaN(e)||e<0||e>10)) setError(eac,eacError,'Use um valor entre 0 e 10.');
+
+  const valid=Number.isFinite(m)&&Number.isFinite(e)&&m>=0&&m<=10&&e>=0&&e<=10;
+  if(valid)showResult(m,e); else clearResult();
 }
-function clearAll(){
+media.addEventListener('input',evaluate);
+eac.addEventListener('input',evaluate);
+reset.addEventListener('click',()=>{
   media.value='';
   eac.value='';
-  clearFieldError(media,mediaError);
-  clearFieldError(eac,eacError);
+  setError(media,mediaError);
+  setError(eac,eacError);
   clearResult();
   media.focus({preventScroll:true});
-}
-media.addEventListener('input',updateCalculation);
-eac.addEventListener('input',updateCalculation);
-form.addEventListener('submit',event=>event.preventDefault());
-reset.addEventListener('click',clearAll);
+});
 window.addEventListener('DOMContentLoaded',()=>media.focus({preventScroll:true}));
 </script>
 </body>
