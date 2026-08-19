@@ -3,337 +3,418 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#17312c">
-<meta name="description" content="Calculadora para atualização da nota após EAC.">
+<meta name="theme-color" content="#173b36">
+<meta name="description" content="Calculadora de atualização da nota após o EAC.">
 <title>Calculadora EAC</title>
 <style>
 :root{
-  --ink:#18222c;
-  --muted:#68727c;
-  --paper:#f3f1eb;
-  --white:#ffffff;
-  --line:#e1dfd8;
-  --forest:#17312c;
-  --forest-2:#21463e;
-  --mint:#98dfcd;
-  --mint-soft:#e5f6f1;
-  --accent:#d9f06a;
-  --danger:#b63f48;
-  --shadow:0 24px 65px rgba(41,49,46,.12);
+  --ink:#17202a;
+  --muted:#69737c;
+  --paper:#f3f0e8;
+  --surface:#fffdf8;
+  --line:#d8d5cd;
+  --green:#173b36;
+  --green-2:#24574f;
+  --lime:#d7ef63;
+  --lime-ink:#243006;
+  --danger:#b64242;
+  --shadow:0 18px 45px rgba(32,40,45,.10);
 }
 *{box-sizing:border-box}
-html{min-height:100%;background:var(--paper)}
+html{min-height:100%}
 body{
   margin:0;
   min-height:100vh;
   color:var(--ink);
-  background:
-    linear-gradient(rgba(24,34,44,.025) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(24,34,44,.025) 1px,transparent 1px),
-    var(--paper);
-  background-size:32px 32px;
+  background:var(--paper);
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 button,input{font:inherit}
-button{color:inherit}
-.shell{width:min(1160px,calc(100% - 40px));margin:0 auto}
-.sitebar{
-  min-height:78px;
+button{cursor:pointer}
+.shell{width:min(1180px,calc(100% - 32px));margin:0 auto}
+.appbar{
+  height:72px;
+  background:var(--green);
+  color:#fff;
+  border-bottom:4px solid var(--lime);
+}
+.appbar .shell{
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+}
+.brand{display:flex;align-items:center;gap:13px;min-width:0}
+.mark{
+  width:40px;height:40px;display:grid;place-items:center;
+  background:var(--lime);color:var(--lime-ink);
+  font-size:12px;font-weight:950;letter-spacing:.06em;
+  border-radius:8px;
+}
+.brand-text{display:flex;flex-direction:column;line-height:1.1}
+.brand-text strong{font-size:15px;letter-spacing:-.01em}
+.brand-text span{margin-top:5px;font-size:11px;color:#b8cbc6}
+.app-context{font-size:12px;color:#dce7e4;text-align:right}
+
+main{padding:34px 0 48px}
+.intro{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:28px;
+  margin-bottom:22px;
+}
+.intro-copy{max-width:660px}
+.eyebrow{
+  display:block;
+  margin-bottom:8px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--green-2);
+}
+h1{
+  margin:0;
+  font-size:clamp(30px,4vw,48px);
+  line-height:1.02;
+  letter-spacing:-.045em;
+}
+.intro p{
+  margin:10px 0 0;
+  max-width:610px;
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.55;
+}
+.formula{
+  min-width:320px;
+  padding:0 0 4px 18px;
+  border-left:3px solid var(--green);
+}
+.formula span{
+  display:block;
+  margin-bottom:7px;
+  color:var(--muted);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+}
+.formula code{
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  font-size:12px;
+  font-weight:800;
+  color:var(--ink);
+}
+
+.calculator{
+  overflow:hidden;
+  background:var(--surface);
+  border:1px solid #cbc8c0;
+  box-shadow:var(--shadow);
+}
+.calc-head{
+  min-height:58px;
+  padding:0 22px;
+  border-bottom:1px solid var(--line);
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:18px;
-  border-bottom:1px solid rgba(24,34,44,.09);
 }
-.brand{display:flex;align-items:center;gap:12px}
-.mark{
-  width:40px;height:40px;border-radius:11px;
-  display:grid;place-items:center;
-  background:var(--forest);color:#fff;
-  font-size:12px;font-weight:900;letter-spacing:.08em;
-}
-.brand-copy{display:grid;gap:1px}
-.brand-copy strong{font-size:14px;letter-spacing:-.01em}
-.brand-copy span{font-size:11px;color:var(--muted)}
-.context{font-size:11px;font-weight:800;color:var(--forest);display:flex;align-items:center;gap:8px}
-.context::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 4px rgba(217,240,106,.22)}
-.intro{
+.calc-head strong{font-size:14px}
+.calc-head span{font-size:11px;color:var(--muted)}
+.flow{
   display:grid;
-  grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr);
-  gap:46px;
-  align-items:end;
-  padding:54px 0 30px;
+  grid-template-columns:minmax(0,1fr) 48px minmax(0,1fr) 48px minmax(300px,1.12fr);
+  min-height:330px;
 }
-.intro small{
-  display:block;
-  margin-bottom:10px;
-  font-size:11px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#367367;
-}
-.intro h1{
-  margin:0;
-  font-size:clamp(38px,5vw,58px);
-  line-height:1.02;
-  letter-spacing:-.055em;
-  max-width:650px;
-}
-.intro p{margin:15px 0 0;max-width:650px;color:var(--muted);font-size:15px;line-height:1.65}
-.formula-note{
-  border-left:3px solid var(--forest);
-  padding:3px 0 3px 18px;
-  align-self:center;
-}
-.formula-note span{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:#87908f;margin-bottom:7px}
-.formula-note code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px;font-weight:750;color:var(--ink);line-height:1.55}
-.workspace{
-  display:grid;
-  grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);
-  background:var(--white);
-  border:1px solid rgba(24,34,44,.09);
-  border-radius:28px;
-  overflow:hidden;
-  box-shadow:var(--shadow);
-  margin-bottom:38px;
-}
-.entry{padding:38px 40px 40px}
-.panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;margin-bottom:34px}
-.panel-head .overline{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#4d857a;margin-bottom:7px}
-.panel-head h2{font-size:24px;letter-spacing:-.035em;margin:0}
-.clear{
-  border:1px solid var(--line);
-  background:#faf9f6;
-  min-height:39px;
-  border-radius:11px;
-  padding:0 12px;
-  display:flex;align-items:center;gap:7px;
-  cursor:pointer;
-  color:#59636c;
-  font-size:12px;font-weight:800;
-  transition:.16s ease;
-}
-.clear svg{width:15px;height:15px;stroke:currentColor}
-.clear:hover{background:#f1efe9;border-color:#cfcac0;color:var(--ink)}
-.clear:focus-visible,.calculate:focus-visible{outline:3px solid rgba(54,115,103,.23);outline-offset:2px}
-.form{display:grid;gap:25px}
-.field{display:grid;grid-template-columns:42px minmax(0,1fr);gap:14px;align-items:start}
-.step{
-  width:38px;height:38px;border-radius:50%;
-  display:grid;place-items:center;
-  background:var(--mint-soft);color:#317369;
-  font-size:10px;font-weight:900;
-  margin-top:25px;
-}
-.field-body{display:grid;gap:8px}
-.field label{font-size:13px;font-weight:850}
-.input-wrap{position:relative}
-.field input{
-  width:100%;height:61px;
-  border:1.5px solid #dcded9;
-  border-radius:14px;
-  background:#fbfbf9;
-  padding:0 66px 0 16px;
-  color:var(--ink);
-  outline:none;
-  font-size:20px;font-weight:800;
-  font-variant-numeric:tabular-nums;
-  transition:.16s ease;
-}
-.field input:focus{background:#fff;border-color:#4d8f82;box-shadow:0 0 0 4px rgba(77,143,130,.11)}
-.field input.invalid{border-color:#c86068;box-shadow:0 0 0 4px rgba(182,63,72,.08)}
-.suffix{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:850;color:#97a09f}
-.help{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;min-height:16px;font-size:10px;color:#909897;line-height:1.45}
-.error{color:var(--danger);font-weight:800;text-align:right}
-.calculate{
-  margin-left:56px;
-  height:56px;
-  border:0;
-  border-radius:14px;
-  background:var(--forest);
-  color:#fff;
-  font-size:13px;font-weight:900;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;gap:9px;
-  transition:.16s ease;
-}
-.calculate svg{width:16px;height:16px;stroke:currentColor}
-.calculate:hover{background:var(--forest-2);transform:translateY(-1px)}
-.output{
-  position:relative;
-  overflow:hidden;
-  background:var(--forest);
-  color:#fff;
-  padding:38px 42px 36px;
-  min-height:470px;
+.stage{
+  padding:34px 30px 28px;
   display:flex;
   flex-direction:column;
+  justify-content:center;
 }
-.output::after{
-  content:"";
+.stage + .stage{border-left:1px solid var(--line)}
+.stage-tag{
+  margin-bottom:18px;
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:var(--green-2);
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.stage-tag b{
+  width:27px;height:27px;display:grid;place-items:center;
+  border:1px solid #bfc9c5;
+  border-radius:50%;
+  font-size:10px;
+}
+.field-label{font-size:15px;font-weight:850;margin-bottom:9px}
+.input-wrap{position:relative}
+.input-wrap input{
+  width:100%;
+  height:72px;
+  border:1.5px solid #c9cec9;
+  background:#fff;
+  padding:0 68px 0 17px;
+  outline:none;
+  color:var(--ink);
+  font-size:28px;
+  font-weight:800;
+  font-variant-numeric:tabular-nums;
+  border-radius:8px;
+  transition:border-color .15s,box-shadow .15s;
+}
+.input-wrap input:focus{
+  border-color:var(--green-2);
+  box-shadow:0 0 0 4px rgba(36,87,79,.10);
+}
+.input-wrap input.invalid{
+  border-color:var(--danger);
+  box-shadow:0 0 0 4px rgba(182,66,66,.08);
+}
+.suffix{
   position:absolute;
-  width:260px;height:260px;border-radius:50%;
-  right:-105px;bottom:-95px;
-  border:1px solid rgba(152,223,205,.18);
-  box-shadow:0 0 0 36px rgba(152,223,205,.045),0 0 0 72px rgba(152,223,205,.025);
+  right:15px;top:50%;transform:translateY(-50%);
+  color:#89918d;font-size:11px;font-weight:800;
 }
-.output-head{display:flex;align-items:center;justify-content:space-between;gap:14px;position:relative;z-index:1}
-.output-title{font-size:10px;font-weight:900;letter-spacing:.13em;text-transform:uppercase;color:#9edacb}
-.status{font-size:10px;font-weight:850;color:#aebeba;border:1px solid rgba(255,255,255,.12);padding:7px 10px;border-radius:999px}
-.status.ready{color:#17312c;background:var(--accent);border-color:transparent}
-.score{position:relative;z-index:1;padding:54px 0 37px;border-bottom:1px solid rgba(255,255,255,.12)}
-.score-label{display:block;color:#aebeba;font-size:12px;font-weight:700;margin-bottom:4px}
-.score strong{display:block;font-size:clamp(82px,8vw,112px);line-height:.9;letter-spacing:-.075em;font-variant-numeric:tabular-nums}
-.score small{display:block;margin-top:11px;color:#91a5a0;font-size:11px}
-.summary{position:relative;z-index:1;display:grid;grid-template-columns:repeat(3,1fr);padding:22px 0 16px}
-.summary-item{padding:0 17px}
-.summary-item:first-child{padding-left:0}
-.summary-item+.summary-item{border-left:1px solid rgba(255,255,255,.12)}
-.summary-item span{display:block;color:#8ea29d;font-size:10px;margin-bottom:5px}
-.summary-item strong{font-size:17px;font-variant-numeric:tabular-nums}
-.summary-item.gain strong{color:var(--mint)}
-.memory{position:relative;z-index:1;margin-top:auto;padding-top:18px;border-top:1px solid rgba(255,255,255,.12)}
-.memory span{display:block;color:#8ea29d;font-size:10px;font-weight:800;margin-bottom:6px}
-.memory code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#dbe7e4;font-size:10.5px;line-height:1.55;white-space:normal;word-break:break-word}
-.mobile-note{display:none}
-@media(max-width:840px){
-  .shell{width:min(700px,calc(100% - 28px))}
-  .intro{grid-template-columns:1fr;gap:24px;padding:38px 0 26px}
-  .formula-note{max-width:520px}
-  .workspace{grid-template-columns:1fr}
-  .output{min-height:420px}
+.help{
+  min-height:34px;
+  padding-top:8px;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  color:#8b918e;
+  font-size:10px;
+  line-height:1.35;
 }
-@media(max-width:520px){
-  .shell{width:calc(100% - 22px)}
-  .sitebar{min-height:68px}
-  .context{display:none}
-  .intro{padding-top:30px}
-  .intro h1{font-size:38px}
-  .intro p{font-size:14px}
-  .formula-note{padding-left:14px}
-  .formula-note code{font-size:11px}
-  .workspace{border-radius:21px}
-  .entry{padding:26px 20px 25px}
-  .panel-head{margin-bottom:27px}
-  .panel-head h2{font-size:22px}
-  .clear{padding:0 10px;min-height:38px}
-  .field{grid-template-columns:34px minmax(0,1fr);gap:10px}
-  .step{width:32px;height:32px;margin-top:28px}
-  .field input{height:58px;font-size:19px}
-  .help{display:block}
-  .error{display:block;text-align:left;margin-top:3px}
-  .calculate{margin-left:44px}
-  .output{padding:28px 22px 26px;min-height:420px}
-  .score{padding:42px 0 30px}
-  .score strong{font-size:86px}
-  .summary{grid-template-columns:1fr;gap:0;padding:13px 0}
-  .summary-item,.summary-item:first-child{padding:11px 0}
-  .summary-item+.summary-item{border-left:0;border-top:1px solid rgba(255,255,255,.1)}
-  .summary-item span{display:inline;margin-right:8px}
-  .summary-item strong{font-size:15px}
+.error{color:var(--danger);font-weight:800}
+.connector{
+  display:grid;
+  place-items:center;
+  color:#8b938f;
+  font-size:28px;
+  border-left:1px solid var(--line);
+}
+.connector span{
+  width:30px;height:30px;
+  display:grid;place-items:center;
+  border:1px solid #c9cec9;
+  border-radius:50%;
+  background:#f7f5ef;
+  font-size:16px;
+}
+.result-stage{
+  background:var(--green);
+  color:#fff;
+  padding:32px 32px 28px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.result-stage .stage-tag{color:#b9d3cc;margin-bottom:10px}
+.result-stage .stage-tag b{border-color:#45675f;color:var(--lime)}
+.result-label{font-size:12px;color:#b7c8c4;font-weight:750}
+.result-value{
+  margin:6px 0 2px;
+  font-size:clamp(72px,8vw,104px);
+  line-height:.95;
+  letter-spacing:-.07em;
+  font-weight:900;
+  font-variant-numeric:tabular-nums;
+}
+.result-hint{font-size:11px;color:#9fb3ae}
+.result-meta{
+  margin-top:24px;
+  padding-top:17px;
+  border-top:1px solid #3e5c55;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+.meta-item span{display:block;font-size:9px;color:#92a8a2;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
+.meta-item strong{font-size:15px}
+.meta-item.gain strong{color:var(--lime)}
+
+.actionbar{
+  display:grid;
+  grid-template-columns:auto auto 1fr;
+  align-items:center;
+  gap:10px;
+  padding:15px 18px;
+  background:#ece9e0;
+  border-top:1px solid var(--line);
+}
+.primary,.secondary{
+  min-height:46px;
+  border-radius:7px;
+  padding:0 18px;
+  font-weight:850;
+  font-size:13px;
+  border:0;
+}
+.primary{background:var(--green);color:#fff;min-width:190px}
+.primary:hover{background:#204c45}
+.secondary{
+  background:transparent;
+  color:var(--ink);
+  border:1px solid #bfc1bb;
+}
+.secondary:hover{background:#fff}
+.memory{
+  min-width:0;
+  text-align:right;
+}
+.memory span{display:block;color:#777f7a;font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;margin-bottom:3px}
+.memory code{
+  display:block;
+  color:#424944;
+  font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
+  font-size:10px;
+  white-space:normal;
+  overflow-wrap:anywhere;
+}
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#a6aca9}
+.status.ready .status-dot{background:var(--lime)}
+.status.ready{color:#31534b}
+
+@media(max-width:900px){
+  .intro{align-items:flex-start;flex-direction:column;gap:17px}
+  .formula{min-width:0;width:100%}
+  .flow{grid-template-columns:1fr;min-height:0}
+  .stage,.result-stage{padding:26px 24px}
+  .stage + .stage{border-left:0}
+  .connector{
+    height:44px;
+    border-left:0;
+    border-top:1px solid var(--line);
+  }
+  .connector span{transform:rotate(90deg)}
+  .result-stage{min-height:280px}
+  .actionbar{grid-template-columns:1fr 1fr}
+  .memory{grid-column:1/-1;text-align:left;padding-top:6px}
+}
+@media(max-width:560px){
+  .shell{width:min(100% - 20px,560px)}
+  .appbar{height:64px}
+  .app-context{display:none}
+  main{padding:24px 0 30px}
+  h1{font-size:34px}
+  .intro p{font-size:13px}
+  .calc-head{padding:0 16px}
+  .calc-head span{display:none}
+  .stage,.result-stage{padding:22px 18px}
+  .input-wrap input{height:66px;font-size:25px}
+  .result-stage{min-height:255px}
+  .result-value{font-size:78px}
+  .actionbar{grid-template-columns:1fr;padding:12px}
+  .primary,.secondary{width:100%}
+  .memory{grid-column:auto}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<header class="shell sitebar">
-  <div class="brand">
-    <div class="mark">EAC</div>
-    <div class="brand-copy">
-      <strong>Calculadora EAC</strong>
-      <span>Atualização de nota</span>
+<header class="appbar">
+  <div class="shell">
+    <div class="brand">
+      <div class="mark">EAC</div>
+      <div class="brand-text">
+        <strong>Calculadora EAC</strong>
+        <span>Atualização de nota</span>
+      </div>
     </div>
+    <div class="app-context">Ferramenta de cálculo para professores</div>
   </div>
-  <div class="context">Ferramenta para professores</div>
 </header>
 
 <main class="shell">
   <section class="intro">
-    <div>
-      <small>Recuperação de aprendizagem</small>
-      <h1>Atualize a nota do estudante após o EAC.</h1>
-      <p>Informe a média anterior e a nota obtida no EAC. A nova nota é calculada pela mesma regra utilizada na planilha.</p>
+    <div class="intro-copy">
+      <span class="eyebrow">Recuperação de aprendizagem</span>
+      <h1>Nova nota após o EAC</h1>
+      <p>Informe a média atual e a nota obtida no EAC. O cálculo segue exatamente a mesma regra utilizada na planilha.</p>
     </div>
-    <aside class="formula-note" aria-label="Fórmula utilizada">
+    <div class="formula" aria-label="Fórmula utilizada">
       <span>Regra de cálculo</span>
       <code>(((10 − EAC) ÷ 10) × Média) + EAC</code>
-    </aside>
+    </div>
   </section>
 
-  <section class="workspace">
-    <article class="entry">
-      <div class="panel-head">
-        <div>
-          <div class="overline">Entrada de dados</div>
-          <h2>Notas do estudante</h2>
-        </div>
-        <button class="clear" id="reset" type="button" aria-label="Limpar notas e iniciar novo cálculo" title="Limpar tudo">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="m19 6-1 14H6L5 6"/><path d="M10 11v5M14 11v5"/></svg>
-          Limpar
-        </button>
-      </div>
+  <section class="calculator" aria-label="Calculadora de nota EAC">
+    <div class="calc-head">
+      <strong>Preencha as duas notas e calcule o novo resultado</strong>
+      <span class="status" id="status"><i class="status-dot"></i><b id="statusText">Aguardando cálculo</b></span>
+    </div>
 
-      <form class="form" id="form" novalidate>
-        <div class="field">
-          <div class="step">01</div>
-          <div class="field-body">
-            <label for="media">Média atual</label>
-            <div class="input-wrap">
-              <input id="media" inputmode="decimal" autocomplete="off" placeholder="Ex.: 8,0" aria-describedby="mediaHelp mediaError">
-              <span class="suffix">/ 10</span>
-            </div>
-            <div class="help"><span id="mediaHelp">Nota antes da atividade EAC.</span><span class="error" id="mediaError"></span></div>
+    <form id="form" novalidate>
+      <div class="flow">
+        <div class="stage">
+          <div class="stage-tag"><b>01</b> Nota anterior</div>
+          <label class="field-label" for="media">Média atual</label>
+          <div class="input-wrap">
+            <input id="media" inputmode="decimal" autocomplete="off" placeholder="8,0" aria-describedby="mediaHelp mediaError">
+            <span class="suffix">/ 10</span>
+          </div>
+          <div class="help">
+            <span id="mediaHelp">Valor da média antes da atividade EAC.</span>
+            <span class="error" id="mediaError"></span>
           </div>
         </div>
 
-        <div class="field">
-          <div class="step">02</div>
-          <div class="field-body">
-            <label for="eac">Nota do EAC</label>
-            <div class="input-wrap">
-              <input id="eac" inputmode="decimal" autocomplete="off" placeholder="Ex.: 4,5" aria-describedby="eacHelp eacError">
-              <span class="suffix">/ 10</span>
-            </div>
-            <div class="help"><span id="eacHelp">Nota obtida na recuperação EAC.</span><span class="error" id="eacError"></span></div>
+        <div class="connector" aria-hidden="true"><span>→</span></div>
+
+        <div class="stage">
+          <div class="stage-tag"><b>02</b> Recuperação</div>
+          <label class="field-label" for="eac">Nota do EAC</label>
+          <div class="input-wrap">
+            <input id="eac" inputmode="decimal" autocomplete="off" placeholder="4,5" aria-describedby="eacHelp eacError">
+            <span class="suffix">/ 10</span>
+          </div>
+          <div class="help">
+            <span id="eacHelp">Nota obtida na atividade de recuperação.</span>
+            <span class="error" id="eacError"></span>
           </div>
         </div>
 
-        <button class="calculate" type="submit">
-          Calcular nova nota
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></svg>
-        </button>
-      </form>
-    </article>
+        <div class="connector" aria-hidden="true"><span>→</span></div>
 
-    <article class="output" aria-live="polite">
-      <div class="output-head">
-        <div class="output-title">Resultado</div>
-        <div class="status" id="status">Aguardando dados</div>
-      </div>
-
-      <div class="score">
-        <span class="score-label">Nova nota</span>
-        <strong id="notaNova">—</strong>
-        <small id="hint">Preencha os dois campos para calcular.</small>
-      </div>
-
-      <div class="summary">
-        <div class="summary-item">
-          <span>Média anterior</span>
-          <strong id="mediaOut">—</strong>
-        </div>
-        <div class="summary-item">
-          <span>Nota EAC</span>
-          <strong id="eacOut">—</strong>
-        </div>
-        <div class="summary-item gain">
-          <span>Acréscimo</span>
-          <strong id="ganhoOut">—</strong>
+        <div class="result-stage" aria-live="polite">
+          <div>
+            <div class="stage-tag"><b>03</b> Resultado</div>
+            <div class="result-label">Nova nota</div>
+            <div class="result-value" id="notaNova">—</div>
+            <div class="result-hint" id="hint">O resultado aparecerá após o cálculo.</div>
+          </div>
+          <div class="result-meta">
+            <div class="meta-item"><span>Média anterior</span><strong id="mediaOut">—</strong></div>
+            <div class="meta-item"><span>Nota EAC</span><strong id="eacOut">—</strong></div>
+            <div class="meta-item gain"><span>Acréscimo</span><strong id="ganhoOut">—</strong></div>
+            <div class="meta-item"><span>Escala</span><strong>0 a 10</strong></div>
+          </div>
         </div>
       </div>
 
-      <div class="memory" id="memory" hidden>
-        <span>Memória de cálculo</span>
-        <code id="memoryText"></code>
+      <div class="actionbar">
+        <button class="primary" type="submit">Calcular nova nota</button>
+        <button class="secondary" id="reset" type="button">Limpar cálculo</button>
+        <div class="memory" id="memory" hidden>
+          <span>Memória de cálculo</span>
+          <code id="memoryText"></code>
+        </div>
       </div>
-    </article>
+    </form>
   </section>
 </main>
 
@@ -348,11 +429,12 @@ const notaNova = $('notaNova');
 const mediaOut = $('mediaOut');
 const eacOut = $('eacOut');
 const ganhoOut = $('ganhoOut');
-const statusEl = $('status');
 const hint = $('hint');
 const memory = $('memory');
 const memoryText = $('memoryText');
 const reset = $('reset');
+const status = $('status');
+const statusText = $('statusText');
 
 const nf = new Intl.NumberFormat('pt-BR', {
   minimumFractionDigits: 1,
@@ -375,14 +457,14 @@ function calculateGrade(mediaValue, eacValue) {
   return (((10 - eacValue) / 10) * mediaValue) + eacValue;
 }
 
-function resetError(input, error) {
+function clearFieldError(input, error) {
   input.classList.remove('invalid');
   input.removeAttribute('aria-invalid');
   error.textContent = '';
 }
 
 function validate(input, error, label) {
-  resetError(input, error);
+  clearFieldError(input, error);
   const value = parseGrade(input.value);
 
   if (value === null) {
@@ -391,19 +473,34 @@ function validate(input, error, label) {
     error.textContent = 'Campo obrigatório.';
     return null;
   }
+
   if (Number.isNaN(value)) {
     input.classList.add('invalid');
     input.setAttribute('aria-invalid', 'true');
     error.textContent = label + ' inválida.';
     return null;
   }
+
   if (value < 0 || value > 10) {
     input.classList.add('invalid');
     input.setAttribute('aria-invalid', 'true');
-    error.textContent = 'Use um valor de 0 a 10.';
+    error.textContent = 'Use um valor entre 0 e 10.';
     return null;
   }
+
   return value;
+}
+
+function clearResult() {
+  notaNova.textContent = '—';
+  mediaOut.textContent = '—';
+  eacOut.textContent = '—';
+  ganhoOut.textContent = '—';
+  hint.textContent = 'O resultado aparecerá após o cálculo.';
+  memory.hidden = true;
+  memoryText.textContent = '';
+  status.className = 'status';
+  statusText.textContent = 'Aguardando cálculo';
 }
 
 function showResult(mediaValue, eacValue) {
@@ -414,35 +511,25 @@ function showResult(mediaValue, eacValue) {
   mediaOut.textContent = formatGrade(mediaValue);
   eacOut.textContent = formatGrade(eacValue);
   ganhoOut.textContent = (gain >= 0 ? '+' : '') + formatGrade(gain);
-  statusEl.textContent = 'Calculado';
-  statusEl.className = 'status ready';
-  hint.textContent = 'Nota final: ' + formatGrade(result) + ' de 10.';
+  hint.textContent = 'Resultado final em uma casa decimal.';
   memory.hidden = false;
   memoryText.textContent = '(((10 − ' + formatGrade(eacValue) + ') ÷ 10) × ' + formatGrade(mediaValue) + ') + ' + formatGrade(eacValue) + ' = ' + formatGrade(result);
-}
-
-function clearResult() {
-  notaNova.textContent = '—';
-  mediaOut.textContent = '—';
-  eacOut.textContent = '—';
-  ganhoOut.textContent = '—';
-  statusEl.textContent = 'Aguardando dados';
-  statusEl.className = 'status';
-  hint.textContent = 'Preencha os dois campos para calcular.';
-  memory.hidden = true;
-  memoryText.textContent = '';
+  status.className = 'status ready';
+  statusText.textContent = 'Calculado';
 }
 
 function clearAll() {
-  form.reset();
-  resetError(media, mediaError);
-  resetError(eac, eacError);
+  media.value = '';
+  eac.value = '';
+  clearFieldError(media, mediaError);
+  clearFieldError(eac, eacError);
   clearResult();
-  requestAnimationFrame(() => media.focus());
+  media.focus({preventScroll:true});
 }
 
 form.addEventListener('submit', event => {
   event.preventDefault();
+
   const mediaValue = validate(media, mediaError, 'Média');
   const eacValue = validate(eac, eacError, 'Nota EAC');
 
@@ -456,20 +543,19 @@ form.addEventListener('submit', event => {
   showResult(mediaValue, eacValue);
 });
 
-[media, eac].forEach(input => {
-  input.addEventListener('input', () => {
-    resetError(input, input === media ? mediaError : eacError);
-    const mediaValue = parseGrade(media.value);
-    const eacValue = parseGrade(eac.value);
-    const valid = Number.isFinite(mediaValue) && Number.isFinite(eacValue) && mediaValue >= 0 && mediaValue <= 10 && eacValue >= 0 && eacValue <= 10;
-    if (valid) showResult(mediaValue, eacValue);
-    else clearResult();
-  });
+media.addEventListener('input', () => {
+  clearFieldError(media, mediaError);
+  clearResult();
+});
+
+eac.addEventListener('input', () => {
+  clearFieldError(eac, eacError);
+  clearResult();
 });
 
 reset.addEventListener('click', clearAll);
 
-window.addEventListener('DOMContentLoaded', () => media.focus());
+window.addEventListener('DOMContentLoaded', () => media.focus({preventScroll:true}));
 </script>
 </body>
 </html>
