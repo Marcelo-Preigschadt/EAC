@@ -56,7 +56,6 @@ button{cursor:pointer}
 .brand-text strong{font-size:15px;letter-spacing:-.01em}
 .brand-text span{margin-top:5px;font-size:11px;color:#b8cbc6}
 .app-context{font-size:12px;color:#dce7e4;text-align:right}
-
 main{padding:34px 0 48px}
 .intro{
   display:flex;
@@ -108,7 +107,6 @@ h1{
   font-weight:800;
   color:var(--ink);
 }
-
 .calculator{
   overflow:hidden;
   background:var(--surface);
@@ -241,27 +239,21 @@ h1{
 .meta-item span{display:block;font-size:9px;color:#92a8a2;margin-bottom:4px;text-transform:uppercase;letter-spacing:.06em}
 .meta-item strong{font-size:15px}
 .meta-item.gain strong{color:var(--lime)}
-
 .actionbar{
   display:grid;
-  grid-template-columns:auto auto 1fr;
+  grid-template-columns:auto 1fr;
   align-items:center;
-  gap:10px;
+  gap:14px;
   padding:15px 18px;
   background:#ece9e0;
   border-top:1px solid var(--line);
 }
-.primary,.secondary{
+.secondary{
   min-height:46px;
   border-radius:7px;
   padding:0 18px;
   font-weight:850;
   font-size:13px;
-  border:0;
-}
-.primary{background:var(--green);color:#fff;min-width:190px}
-.primary:hover{background:#204c45}
-.secondary{
   background:transparent;
   color:var(--ink);
   border:1px solid #bfc1bb;
@@ -288,7 +280,6 @@ h1{
 .status-dot{width:7px;height:7px;border-radius:50%;background:#a6aca9}
 .status.ready .status-dot{background:var(--lime)}
 .status.ready{color:#31534b}
-
 @media(max-width:900px){
   .intro{align-items:flex-start;flex-direction:column;gap:17px}
   .formula{min-width:0;width:100%}
@@ -302,8 +293,9 @@ h1{
   }
   .connector span{transform:rotate(90deg)}
   .result-stage{min-height:280px}
-  .actionbar{grid-template-columns:1fr 1fr}
-  .memory{grid-column:1/-1;text-align:left;padding-top:6px}
+  .actionbar{grid-template-columns:1fr}
+  .secondary{width:100%}
+  .memory{text-align:left;padding-top:6px}
 }
 @media(max-width:560px){
   .shell{width:min(100% - 20px,560px)}
@@ -318,9 +310,7 @@ h1{
   .input-wrap input{height:66px;font-size:25px}
   .result-stage{min-height:255px}
   .result-value{font-size:78px}
-  .actionbar{grid-template-columns:1fr;padding:12px}
-  .primary,.secondary{width:100%}
-  .memory{grid-column:auto}
+  .actionbar{padding:12px}
 }
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
@@ -338,26 +328,23 @@ h1{
     <div class="app-context">Ferramenta de cálculo para professores</div>
   </div>
 </header>
-
 <main class="shell">
   <section class="intro">
     <div class="intro-copy">
       <span class="eyebrow">Recuperação de aprendizagem</span>
       <h1>Nova nota após o EAC</h1>
-      <p>Informe a média atual e a nota obtida no EAC. O cálculo segue exatamente a mesma regra utilizada na planilha.</p>
+      <p>Informe a média atual e a nota obtida no EAC. Assim que os dois valores forem preenchidos, a nova nota aparecerá automaticamente.</p>
     </div>
     <div class="formula" aria-label="Fórmula utilizada">
       <span>Regra de cálculo</span>
       <code>(((10 − EAC) ÷ 10) × Média) + EAC</code>
     </div>
   </section>
-
   <section class="calculator" aria-label="Calculadora de nota EAC">
     <div class="calc-head">
-      <strong>Preencha as duas notas e calcule o novo resultado</strong>
-      <span class="status" id="status"><i class="status-dot"></i><b id="statusText">Aguardando cálculo</b></span>
+      <strong>Preencha as duas notas</strong>
+      <span class="status" id="status"><i class="status-dot"></i><b id="statusText">Aguardando notas</b></span>
     </div>
-
     <form id="form" novalidate>
       <div class="flow">
         <div class="stage">
@@ -372,9 +359,7 @@ h1{
             <span class="error" id="mediaError"></span>
           </div>
         </div>
-
         <div class="connector" aria-hidden="true"><span>→</span></div>
-
         <div class="stage">
           <div class="stage-tag"><b>02</b> Recuperação</div>
           <label class="field-label" for="eac">Nota do EAC</label>
@@ -387,15 +372,13 @@ h1{
             <span class="error" id="eacError"></span>
           </div>
         </div>
-
         <div class="connector" aria-hidden="true"><span>→</span></div>
-
         <div class="result-stage" aria-live="polite">
           <div>
             <div class="stage-tag"><b>03</b> Resultado</div>
             <div class="result-label">Nova nota</div>
             <div class="result-value" id="notaNova">—</div>
-            <div class="result-hint" id="hint">O resultado aparecerá após o cálculo.</div>
+            <div class="result-hint" id="hint">Preencha as duas notas.</div>
           </div>
           <div class="result-meta">
             <div class="meta-item"><span>Média anterior</span><strong id="mediaOut">—</strong></div>
@@ -405,9 +388,7 @@ h1{
           </div>
         </div>
       </div>
-
       <div class="actionbar">
-        <button class="primary" type="submit">Calcular nova nota</button>
         <button class="secondary" id="reset" type="button">Limpar cálculo</button>
         <div class="memory" id="memory" hidden>
           <span>Memória de cálculo</span>
@@ -417,7 +398,6 @@ h1{
     </form>
   </section>
 </main>
-
 <script>
 const $ = id => document.getElementById(id);
 const form = $('form');
@@ -435,127 +415,84 @@ const memoryText = $('memoryText');
 const reset = $('reset');
 const status = $('status');
 const statusText = $('statusText');
-
-const nf = new Intl.NumberFormat('pt-BR', {
-  minimumFractionDigits: 1,
-  maximumFractionDigits: 1
-});
-
-function parseGrade(value) {
-  const normalized = value.trim().replace(',', '.');
-  if (!normalized) return null;
-  const number = Number(normalized);
-  return Number.isFinite(number) ? number : NaN;
+const nf = new Intl.NumberFormat('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+function parseGrade(value){
+  const normalized=value.trim().replace(',','.');
+  if(!normalized)return null;
+  const number=Number(normalized);
+  return Number.isFinite(number)?number:NaN;
 }
-
-function formatGrade(value) {
-  const rounded = Math.round((value + Number.EPSILON) * 10) / 10;
+function formatGrade(value){
+  const rounded=Math.round((value+Number.EPSILON)*10)/10;
   return nf.format(rounded);
 }
-
-function calculateGrade(mediaValue, eacValue) {
-  return (((10 - eacValue) / 10) * mediaValue) + eacValue;
+function calculateGrade(mediaValue,eacValue){
+  return (((10-eacValue)/10)*mediaValue)+eacValue;
 }
-
-function clearFieldError(input, error) {
+function clearFieldError(input,error){
   input.classList.remove('invalid');
   input.removeAttribute('aria-invalid');
-  error.textContent = '';
+  error.textContent='';
 }
-
-function validate(input, error, label) {
-  clearFieldError(input, error);
-  const value = parseGrade(input.value);
-
-  if (value === null) {
-    input.classList.add('invalid');
-    input.setAttribute('aria-invalid', 'true');
-    error.textContent = 'Campo obrigatório.';
-    return null;
+function setFieldError(input,error,message){
+  input.classList.add('invalid');
+  input.setAttribute('aria-invalid','true');
+  error.textContent=message;
+}
+function clearResult(){
+  notaNova.textContent='—';
+  mediaOut.textContent='—';
+  eacOut.textContent='—';
+  ganhoOut.textContent='—';
+  hint.textContent='Preencha as duas notas.';
+  memory.hidden=true;
+  memoryText.textContent='';
+  status.className='status';
+  statusText.textContent='Aguardando notas';
+}
+function showResult(mediaValue,eacValue){
+  const result=calculateGrade(mediaValue,eacValue);
+  const gain=result-mediaValue;
+  notaNova.textContent=formatGrade(result);
+  mediaOut.textContent=formatGrade(mediaValue);
+  eacOut.textContent=formatGrade(eacValue);
+  ganhoOut.textContent=(gain>=0?'+':'')+formatGrade(gain);
+  hint.textContent='Resultado calculado automaticamente.';
+  memory.hidden=false;
+  memoryText.textContent='(((10 − '+formatGrade(eacValue)+') ÷ 10) × '+formatGrade(mediaValue)+') + '+formatGrade(eacValue)+' = '+formatGrade(result);
+  status.className='status ready';
+  statusText.textContent='Calculado';
+}
+function updateCalculation(){
+  clearFieldError(media,mediaError);
+  clearFieldError(eac,eacError);
+  const mediaValue=parseGrade(media.value);
+  const eacValue=parseGrade(eac.value);
+  let invalid=false;
+  if(mediaValue!==null){
+    if(Number.isNaN(mediaValue)){setFieldError(media,mediaError,'Média inválida.');invalid=true;}
+    else if(mediaValue<0||mediaValue>10){setFieldError(media,mediaError,'Use um valor entre 0 e 10.');invalid=true;}
   }
-
-  if (Number.isNaN(value)) {
-    input.classList.add('invalid');
-    input.setAttribute('aria-invalid', 'true');
-    error.textContent = label + ' inválida.';
-    return null;
+  if(eacValue!==null){
+    if(Number.isNaN(eacValue)){setFieldError(eac,eacError,'Nota EAC inválida.');invalid=true;}
+    else if(eacValue<0||eacValue>10){setFieldError(eac,eacError,'Use um valor entre 0 e 10.');invalid=true;}
   }
-
-  if (value < 0 || value > 10) {
-    input.classList.add('invalid');
-    input.setAttribute('aria-invalid', 'true');
-    error.textContent = 'Use um valor entre 0 e 10.';
-    return null;
-  }
-
-  return value;
+  if(invalid||mediaValue===null||eacValue===null){clearResult();return;}
+  showResult(mediaValue,eacValue);
 }
-
-function clearResult() {
-  notaNova.textContent = '—';
-  mediaOut.textContent = '—';
-  eacOut.textContent = '—';
-  ganhoOut.textContent = '—';
-  hint.textContent = 'O resultado aparecerá após o cálculo.';
-  memory.hidden = true;
-  memoryText.textContent = '';
-  status.className = 'status';
-  statusText.textContent = 'Aguardando cálculo';
-}
-
-function showResult(mediaValue, eacValue) {
-  const result = calculateGrade(mediaValue, eacValue);
-  const gain = result - mediaValue;
-
-  notaNova.textContent = formatGrade(result);
-  mediaOut.textContent = formatGrade(mediaValue);
-  eacOut.textContent = formatGrade(eacValue);
-  ganhoOut.textContent = (gain >= 0 ? '+' : '') + formatGrade(gain);
-  hint.textContent = 'Resultado final em uma casa decimal.';
-  memory.hidden = false;
-  memoryText.textContent = '(((10 − ' + formatGrade(eacValue) + ') ÷ 10) × ' + formatGrade(mediaValue) + ') + ' + formatGrade(eacValue) + ' = ' + formatGrade(result);
-  status.className = 'status ready';
-  statusText.textContent = 'Calculado';
-}
-
-function clearAll() {
-  media.value = '';
-  eac.value = '';
-  clearFieldError(media, mediaError);
-  clearFieldError(eac, eacError);
+function clearAll(){
+  media.value='';
+  eac.value='';
+  clearFieldError(media,mediaError);
+  clearFieldError(eac,eacError);
   clearResult();
   media.focus({preventScroll:true});
 }
-
-form.addEventListener('submit', event => {
-  event.preventDefault();
-
-  const mediaValue = validate(media, mediaError, 'Média');
-  const eacValue = validate(eac, eacError, 'Nota EAC');
-
-  if (mediaValue === null || eacValue === null) {
-    clearResult();
-    const firstInvalid = document.querySelector('.invalid');
-    if (firstInvalid) firstInvalid.focus();
-    return;
-  }
-
-  showResult(mediaValue, eacValue);
-});
-
-media.addEventListener('input', () => {
-  clearFieldError(media, mediaError);
-  clearResult();
-});
-
-eac.addEventListener('input', () => {
-  clearFieldError(eac, eacError);
-  clearResult();
-});
-
-reset.addEventListener('click', clearAll);
-
-window.addEventListener('DOMContentLoaded', () => media.focus({preventScroll:true}));
+media.addEventListener('input',updateCalculation);
+eac.addEventListener('input',updateCalculation);
+form.addEventListener('submit',event=>event.preventDefault());
+reset.addEventListener('click',clearAll);
+window.addEventListener('DOMContentLoaded',()=>media.focus({preventScroll:true}));
 </script>
 </body>
 </html>
